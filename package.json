@@ -1,8 +1,19 @@
 {
-  "dependencies": {
-    "inquirer": "^9.2.12"
+  "name": "your-package-name",
+  "version": "1.0.0",
+  "description": "Your package description",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "start": "node index.js"
+  },
+  "jest": {
+    "testEnvironment": "node"
   },
   "devDependencies": {
     "jest": "^29.7.0"
+  },
+  "dependencies": {
+    "inquirer": "^9.2.12"
   }
 }
