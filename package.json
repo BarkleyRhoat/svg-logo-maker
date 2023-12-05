@@ -1,7 +1,7 @@
 {
-  "name": "your-package-name",
+  "name": "svg-logo-maker",
   "version": "1.0.0",
-  "description": "Your package description",
+  "description": "A command-line tool for generating SVG logos",
   "main": "index.js",
   "scripts": {
     "test": "jest",
