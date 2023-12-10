@@ -40,11 +40,11 @@ async function generateLogo() {
     // Create SVG file based on user input
     const svgContent = generateSVG(userInput);
 
-    // Define the path to the 'example' folder and the SVG file name
+    // Define the path to the 'examples' folder and the SVG file name
     const exampleFolderPath = path.join(__dirname, 'examples');
     const svgFilePath = path.join(exampleFolderPath, 'logo.svg');
 
-    // Ensure that the 'example' folder exists
+    // Ensure that the 'examples' folder exists
     if (!fs.existsSync(exampleFolderPath)) {
       fs.mkdirSync(exampleFolderPath);
     }
