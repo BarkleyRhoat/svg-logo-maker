@@ -1,89 +1,64 @@
-
+const inquirer = require('inquirer');
 const fs = require('fs');
-const run = async () => {
-    console.log('script is running...');
-const inquirer = await import('inquirer');
-console.log('inquirer imported successfully.');
-// const inquirer = require('inquirer');
-const shapes = require('./shapes');
+const generateSVG = require('./lib/generateSVG.js'); 
+// const shapes = require('./lib/shapes.js');
+const path = require('path');
 
-
-const generateSVG = (color, shape, text) => {
-const shapeInstance = new shape(text, color);
-const svgContent = shapeInstance.render();
-
-
-//   Generate SVG content based on the selected shape
-  switch (shape) {
-    case 'circle':
-      svgContent = `<circle cx="150" cy="100" r="80" fill="${this.color}" /> `
-      break;
-    case 'square':
-      svgContent = `<rect width="300" height="200" fill="${this.color}" />`;
-      break;
-    case 'triangle':
-      svgContent = `<polygon points="200,10 250,210 160,210" fill="${this.color}" /> `
-                    
-      break;
-    default:
-      console.log('Invalid shape');
-      process.exit(1);
-  }
-
-  // Wrap the content in an SVG tag
-  const svg = `<svg width="300" height="200" xmlns="http://www.w3.org/2000/svg">
-                ${svgContent}
-              </svg>`;
-
-  return svg;
-};
-
-const saveSVGToFile = (svg, filename) => {
-  fs.writeFileSync(filename, svg);
-  console.log(`Generated ${filename}`);
-};
-
-const runCLI = async () => {
-    console.log('script is running...');
-    console.log('inquirer imported successfully')
+async function promptUser() {
   const userInput = await inquirer.prompt([
     {
       type: 'input',
       name: 'text',
-      message: 'Enter up to three characters for the logo:',
+      message: 'Enter up to three characters:',
       validate: (input) => input.length <= 3,
     },
     {
       type: 'input',
       name: 'textColor',
-      message: 'Enter the text color (keyword or hexadecimal):',
+      message: 'Enter text color (keyword or hexadecimal):',
     },
     {
       type: 'list',
       name: 'shape',
-      message: 'Select a shape for the logo:',
-      choices: ['circle', 'square', 'triangle'],
+      message: 'Choose a shape:',
+      choices: ['circle', 'triangle', 'square'],
     },
     {
       type: 'input',
       name: 'shapeColor',
-      message: 'Enter the shape color (keyword or hexadecimal):',
+      message: 'Enter shape color (keyword or hexadecimal):',
     },
   ]);
-  console.log('after inguirer.prompt');
 
-  const { text, textColor, shape, shapeColor } = userInput;
+  return userInput;
+}
 
-  const svg = generateSVG(textColor, shape, text, shapeColor);
+async function generateLogo() {
+  try {
+    const userInput = await promptUser();
 
-  const filename = 'logo.svg';
-  saveSVGToFile(svg, filename);
-};
+    // Create SVG file based on user input
+    const svgContent = generateSVG(userInput);
 
-run();
-};
+    // Define the path to the 'example' folder and the SVG file name
+    const exampleFolderPath = path.join(__dirname, 'examples');
+    const svgFilePath = path.join(exampleFolderPath, 'logo.svg');
 
+    // Ensure that the 'example' folder exists
+    if (!fs.existsSync(exampleFolderPath)) {
+      fs.mkdirSync(exampleFolderPath);
+    }
 
+    // Write the SVG content to the specified file path
+    fs.writeFileSync(svgFilePath, svgContent);
+
+    console.log(`Generated ${svgFilePath}`);
+  } catch (error) {
+    console.error('Error generating logo:', error);
+  }
+}
+
+generateLogo();
 
 
 
